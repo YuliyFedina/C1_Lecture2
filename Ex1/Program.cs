@@ -23,7 +23,7 @@ namespace Ex1
                 for (i = 0; i < n; i++)
                 {
                     Console.WriteLine("Введите " + (i + 1) + " число из " + n);
-                    current_value = Convert.ToInt32(Console.ReadLine());
+                    current_value = Input();
 
                     sum = sum + current_value;
                     if (max < current_value) max = current_value;
