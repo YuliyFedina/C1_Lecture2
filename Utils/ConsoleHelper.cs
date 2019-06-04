@@ -19,16 +19,6 @@ namespace Utils
             }
         }
 
-        public static double InputDouble()
-        {
-            while (true)
-            {
-                if (double.TryParse(Console.ReadLine(), out var value))
-                    return value;
-                Console.Write("Некорректное значение операнда! Попробуйте еще раз число (double):");
-            }
-        }
-
         public static void MatrixOutput(int[,] matrix)
         {
             for (var i = 0; i < matrix.GetLength(0); i++)
