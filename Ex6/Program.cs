@@ -1,6 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Design;
-using System.IO;
+using Utils;
 
 namespace Ex6
 {
@@ -12,29 +11,33 @@ namespace Ex6
             //результат операции над операндами. Реализовать как минимум 4 операции, обработку
             //ошибок(деление на 0 и др).
 
-            Console.WriteLine("Калькулятор с 4 операциями: +, -, /, *");
+            /*Console.WriteLine("Калькулятор с 4 операциями: +, -, /, *");
             Console.Write("Введите левый операнд (число): ");
-            double leftopr = InputOperand();
+            var leftOperand = ConsoleHelper.InputDouble();
             Console.Write("Введите операцию (одну из: +, -, /, *): ");
-            string operation = InputOperation();
+            var operation = InputOperation();
 
             Console.Write("Введите правый операнд (число): ");
 
-            double rightopr = InputOperand();
-            string result = Result(leftopr, operation, rightopr);
-            Console.WriteLine();
-            Console.WriteLine("Результат: " + leftopr + " " + operation + " " + rightopr + " = " + result);
-        }
-
-        private static double InputOperand()
-        {
-            while (true)
+            var rightOperand = ConsoleHelper.InputDouble();*/
+            var leftOperand = double.Parse(args[0]);
+            var operation = args[1];
+            var rightOperand = double.Parse(args[2]);
+            try
             {
-                double value;
-                if (double.TryParse(Console.ReadLine(), out value))
-                    return value;
-                Console.Write("Некорректное значение операнда! Попробуйте еще раз:   ");
+                double result = Result(leftOperand, operation, rightOperand);
+                Console.WriteLine();
+                Console.WriteLine($"Результат: {leftOperand} {operation} {rightOperand} = {result}");
             }
+            catch (DivideByZeroException)
+            {
+                Console.WriteLine("Делить на ноль нельзя");
+            }
+            catch (NotSupportedException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
         }
 
         private static string InputOperation()
@@ -48,47 +51,34 @@ namespace Ex6
             }
         }
 
-       private static string Result(double opr1,string opr, double opr2)
+       private static double Result(double opr1,string opr, double opr2)
         {
-            while (true)
-            {
-                double result;
-                if (opr == "+")
+            double result;
+                switch (opr)
                 {
-                    result = opr1 + opr2;
-                    return result.ToString();
-                }
-                if (opr == "-")
-                {
-                    result = opr1 - opr2;
-                    return result.ToString();
-                }
-
-                if (opr == "*")
-                {
-                    result = opr1 * opr2;
-                    return result.ToString();
-                }
-
-                if (opr == "/")
-                {
-                    if (opr2 != 0)
+                    case "+" :
+                        result = opr1 + opr2;
+                        return result;
+                    case "-":
+                        result = opr1 - opr2;
+                        return result;
+                    case "*":
+                        result = opr1 * opr2;
+                        return result;
+                    case "/":
                     {
-                        result = opr1 / opr2;
-                        return result.ToString();
+                        if (opr2 != 0)
+                        {
+                            result = opr1 / opr2;
+                            return result;
+                        }
+
+                        throw new DivideByZeroException();
                     }
 
-                    if (opr2 == 0)
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine("На ноль делить нельзя! Начните заново");
-                        return "Error";
-                    }
+                        default:
+                            throw new NotSupportedException($" оператор {opr} не поддерживается");
                 }
-            }
         }
-
-      
-
     }
 }

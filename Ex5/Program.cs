@@ -1,101 +1,72 @@
 ﻿using System;
-using System.Text;
+using System.Linq;
+using Utils;
 
 namespace Ex5
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             //Заполнить матрицу NxM случайными числами. Из каждой строки выбрать минимальный
             //элемент, занести его в массив. Отсортировать полученный массив и вывести его
             //значения в обратном порядке.
             Console.Write("Введите N (количество строк в будущей рандомной матрице): ");
-            int n = Input();
+            var n = ConsoleHelper.InputInt();
             Console.Write("Введите M (количество столбцов в будущей рандомной матрице): ");
-            int m = Input();
-            Random rand = new Random();
-            int[,] matrix = new int[n,m];
-            int[] minvaluesstr = new int[n];
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < m; j++)
-                {
-                    matrix[i, j] = rand.Next(1000);
-                }
-            }
-            int maxlenght = matrix[1,1].ToString().Length;
-            int minvalue = matrix[1,1];
+            var m = ConsoleHelper.InputInt();
+            var matrix = RandomMatrix(n,m);
+            var minValues = new int[n];
 
-            for (int i = 0; i < n; i++)
+            var maxLenght = matrix[1,1].ToString().Length;
+
+            for (var i = 0; i < n; i++)
             {
-                minvalue = matrix[i, 1];
-                for (int j = 0; j < m; j++)
+                var minValue = matrix[i, 1];
+                for (var j = 0; j < m; j++)
                 {
-                    if (maxlenght < matrix[i, j].ToString().Length)
+                    if (maxLenght < matrix[i, j].ToString().Length)
                     {
-                        maxlenght = matrix[i, j].ToString().Length;
+                        maxLenght = matrix[i, j].ToString().Length;
                     }
 
-                    if (minvalue > matrix[i, j])
+                    if (minValue > matrix[i, j])
                     {
-                        minvalue = matrix[i, j];
+                        minValue = matrix[i, j];
                     }
-
-                    minvaluesstr[i] = minvalue;
+                    minValues[i] = minValue;
                 }
-
             }
 
             Console.WriteLine("Матрица NxM, заполненная рандомными значениями (int):");
-
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < m; j++)
-                {
-                    Console.Write(Value(matrix[i,j].ToString(), maxlenght) + " ");
-                }
-                Console.WriteLine();
-            }
+            ConsoleHelper.MatrixOutput(matrix);
 
             Console.WriteLine();
             Console.WriteLine("Минимальные ээлементы в строках матрицы: ");
-            for (int i = 0; i < n; i++)
-            {
-                Console.Write(minvaluesstr[i] + " ");
-            }
+            ConsoleHelper.ArrayOutput(minValues);
 
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("Минимальные ээлементы в строках матрицы, отсортированные в обратном порядке: ");
-            Array.Sort(minvaluesstr);
-            for (int i = n - 1; i >= 0; i--)
-            {
-                Console.Write(minvaluesstr[i] + " ");
-            }
+            var sortedMinValues = minValues.OrderByDescending(x => x).ToArray();
+            ConsoleHelper.ArrayOutput(sortedMinValues);
 
             Console.WriteLine();
         }
 
-        private static int Input()
+        private static int[,] RandomMatrix(int n, int m)
         {
-            while (true)
+            var rand = new Random();
+            var matrix = new int[n, m];
+            for (var i = 0; i < n; i++)
             {
-                int value;
-                if (int.TryParse(Console.ReadLine(), out value))
-                    return value;
-                Console.Write("Некорректное значение! Попробуйте еще раз: ");
+                for (var j = 0; j < m; j++)
+                {
+                    matrix[i, j] = rand.Next(1000);
+                }
             }
-        }
 
-        private static string Value(string str, int lenght)
-        {
-            StringBuilder valuewithspaces = new StringBuilder(str);
-            for (int i = 0; i < (lenght - str.Length); i++)
-            {
-                valuewithspaces.Append(' ');
-            }
-            return valuewithspaces.ToString();
+            return matrix;
         }
     }
 }

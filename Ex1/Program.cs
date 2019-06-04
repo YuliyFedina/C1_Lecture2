@@ -1,54 +1,50 @@
 ﻿using System;
+using Utils;
 
 namespace Ex1
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             do
             {
                 //Ввести с консоли N чисел. Вывести сумму, максимальное, минимальное значения, количество четных чисел, произведение нечетных чисел
-                Console.WriteLine(
-                    "Ввести с консоли N чисел. Вывести сумму, максимальное, минимальное значения, количество четных чисел, произведение нечетных чисел");
-                Console.WriteLine("Введите N (количество чисел, с которыми будем работать):");
-                var n = Input();
-                int i;
-                int current_value;
+                Console.Write("Введите N (количество чисел, с которыми будем работать):  ");
+                var n = ConsoleHelper.InputInt(1,10);
                 var sum = 0;
-                var max = 0;
-                var even = 0;
-                var mult = 1;
-
-                for (i = 0; i < n; i++)
+                var max = int.MinValue;
+                var min = int.MaxValue;
+                var numbersEven = 0;
+                var numbersOdd = 0;
+                var multiplicationOdd = 1;
+                if (n <= 0) continue;
+                for (var i = 0; i < n; i++)
                 {
-                    Console.WriteLine("Введите " + (i + 1) + " число из " + n);
-                    current_value = Input();
-
-                    sum = sum + current_value;
-                    if (max < current_value) max = current_value;
-
-                    if (current_value % 2 == 0)
-                        even++;
-
-                    if (current_value % 2 == 1) mult = mult * current_value;
+                    Console.Write($"Введите {i + 1} число из {n}:  ");
+                    var currentValue = ConsoleHelper.InputInt();
+                    sum += currentValue;
+                        if (max < currentValue) max = currentValue;
+                        if (min > currentValue) min = currentValue;
+                        if (currentValue % 2 == 0)
+                        {
+                            numbersEven++;
+                        }
+                        else
+                        {
+                            numbersOdd++;
+                            multiplicationOdd *= currentValue;
+                        }
+                    
                 }
 
-                Console.WriteLine("Сумма всех введенных чисел = " + sum);
-                Console.WriteLine("Максимальное из введеных чисел = " + max);
-                Console.WriteLine("Количество четных чисел = " + even);
+                Console.WriteLine($"Сумма всех введенных чисел = {sum}");
+                Console.WriteLine($"Максимальное из введеных чисел = {max}");
+                Console.WriteLine($"Минимальное из введеных чисел = {min}");
+                Console.WriteLine($"Количество четных чисел = {numbersEven}");
+                //is this condition true ? yes : no
+                Console.WriteLine($"Произведение нечетных чисел = {(numbersOdd != 0 ? multiplicationOdd.ToString() : "Нечетных чисел нет")} ");
             } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
-        }
-
-        private static int Input()
-        {
-            while (true)
-            {
-                int j;
-                if (int.TryParse(Console.ReadLine(), out j))
-                    return j;
-                Console.WriteLine("Введено некорректное значение! Попробуйте еще раз: ");
-            }
         }
     }
 }

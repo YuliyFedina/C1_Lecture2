@@ -1,44 +1,35 @@
 ﻿using System;
-using System.Threading.Tasks.Sources;
+using System.Linq;
+using Utils;
 
 namespace Ex2
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             do
             {
                 //Заполнить с консоли массив из N элементов. Отсортировать.
                 //Вывести результат. N - задается с консоли
                 Console.Write("Введите N - количество элементов, с которыми будем работать: ");
-                var n = Input();
-                int[] elements = new int[n];
-                for (int i = 0; i < n; i++)
+                var n = ConsoleHelper.InputInt();
+                var elements = new int[n];
+                for (var i = 0; i < n; i++)
                 {
-                    Console.Write("Введите " + (i + 1) + " элемент из " + n + ":  ");
-                    elements[i] = Input();
+                    Console.Write($"Введите {i + 1} элемент из {n}:  ");
+                    elements[i] = ConsoleHelper.InputInt();
                 }
-                Array.Sort(elements);
+
+                var sortedElements = elements.OrderBy(x => x);
                 Console.Write("Отсортированный массив: ");
-                
-                for (int i = 0; i < n; i++)
+
+                foreach (var element in sortedElements)
                 {
-                    Console.Write(" " + elements[i]);
+                    Console.Write($" {element} ");
                 }
+                Console.WriteLine();
             } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
-
-        }
-
-        private static int Input()
-        {
-            while (true)
-            {
-                int value;
-                if (int.TryParse(Console.ReadLine(), out value))
-                    return value;
-                Console.WriteLine("Некорректное значение! Попробуйте еще раз:");
-            }
 
         }
     }
